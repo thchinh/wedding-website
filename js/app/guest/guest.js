@@ -1,17 +1,17 @@
-import { video } from './video.js';
-import { image } from './image.js';
-import { audio } from './audio.js';
-import { progress } from './progress.js';
-import { util } from '../../common/util.js';
-import { bs } from '../../libs/bootstrap.js';
-import { loader } from '../../libs/loader.js';
-import { theme } from '../../common/theme.js';
 import { lang } from '../../common/language.js';
-import { storage } from '../../common/storage.js';
-import { session } from '../../common/session.js';
 import { offline } from '../../common/offline.js';
-import * as confetti from '../../libs/confetti.js';
+import { session } from '../../common/session.js';
+import { storage } from '../../common/storage.js';
+import { theme } from '../../common/theme.js';
+import { util } from '../../common/util.js';
 import { pool } from '../../connection/request.js';
+import { bs } from '../../libs/bootstrap.js';
+import * as confetti from '../../libs/confetti.js';
+import { loader } from '../../libs/loader.js';
+import { audio } from './audio.js';
+import { image } from './image.js';
+import { progress } from './progress.js';
+import { video } from './video.js';
 
 export const guest = (() => {
   /**
@@ -89,11 +89,6 @@ export const guest = (() => {
       util.safeInnerHTML(div, template);
 
       guestName?.appendChild(div);
-    }
-
-    const form = document.getElementById('form-name');
-    if (form) {
-      form.value = information.get('name') ?? name;
     }
   };
 
@@ -416,6 +411,10 @@ export const guest = (() => {
     }
   };
 
+  /**
+   * @returns {Promise<void>}
+   */
+
   const bindingGuestName = async () => {
     // GuestId stand for UUID of the guest
 
@@ -427,11 +426,33 @@ export const guest = (() => {
     const guestName = guests.find((g) => g.id === guestId);
 
     if (guestName) {
-      const el = document.getElementById('guest-name');
-      if (el) {
-        el.innerHTML = guestName.name;
-      }
+      document.getElementById('form-name').value = guestName.name;
+      document.getElementById('guest-name').innerHTML = guestName.name;
     }
+  };
+
+  const sendComment = (button) => {
+    const name = document.getElementById('form-name');
+    if (name.value.length === 0) {
+      util.notify('Vui lòng điền tên!').warning();
+      name.focus();
+      return;
+    }
+
+    const presence = document.getElementById('form-presence');
+    if (presence && presence.value === '0') {
+      util.notify('Vui lòng chọn trạng thái tham dự.').warning();
+      return;
+    }
+
+    const wish = document.getElementById(`form-comment`);
+    if (wish && !wish.value) {
+      util.notify('Vui lòng nhập lời chúc của bạn.').warning();
+      return;
+    }
+
+    util.notify('Cảm ơn bạn đã gửi lời chúc.').info();
+    button.disabled = true;
   };
 
   /**
@@ -453,8 +474,8 @@ export const guest = (() => {
     });
 
     bindingGuestName();
-
     return {
+      sendComment,
       util,
       theme,
       guest: {

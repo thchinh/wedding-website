@@ -113,3 +113,13 @@ svg {
 .no-gap-bottom {
     margin-bottom: -0.75rem !important;
 }
+
+#thank-you-end:hover, #thank-you-text:hover {
+    transform: scale(1.1);
+}
+
+#button-scroll-top:hover, #button-music:hover {
+    transform: scale(1.1);
+    background-color: black !important;
+    color: white;
+}

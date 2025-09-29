@@ -1,20 +1,18 @@
-import { gif } from './gif.js';
-import { card } from './card.js';
-import { like } from './like.js';
-import { util } from '../../common/util.js';
-import { pagination } from './pagination.js';
-import { dto } from '../../connection/dto.js';
 import { lang } from '../../common/language.js';
-import { storage } from '../../common/storage.js';
 import { session } from '../../common/session.js';
+import { storage } from '../../common/storage.js';
+import { util } from '../../common/util.js';
+import { dto } from '../../connection/dto.js';
 import {
-  request,
-  HTTP_GET,
-  HTTP_POST,
   HTTP_DELETE,
+  HTTP_GET,
   HTTP_PUT,
-  HTTP_STATUS_CREATED,
+  request,
 } from '../../connection/request.js';
+import { card } from './card.js';
+import { gif } from './gif.js';
+import { like } from './like.js';
+import { pagination } from './pagination.js';
 
 export const comment = (() => {
   /**
@@ -479,207 +477,6 @@ export const comment = (() => {
 
     badge.classList.toggle('fa-circle-check', isPresent);
     badge.classList.toggle('text-success', isPresent);
-  };
-
-  /**
-   * @param {HTMLButtonElement} button
-   * @returns {Promise<void>}
-   */
-  const send = async (button) => {
-    const id = button.getAttribute('data-uuid');
-
-    const name = document.getElementById('form-name');
-    const nameValue = name.value;
-
-    if (nameValue.length === 0) {
-      util.notify('Name cannot be empty.').warning();
-
-      if (id) {
-        // scroll to form.
-        name.scrollIntoView({ block: 'center' });
-      }
-      return;
-    }
-
-    const presence = document.getElementById('form-presence');
-    if (!id && presence && presence.value === '0') {
-      util.notify('Please select your attendance status.').warning();
-      return;
-    }
-
-    const gifIsOpen = gif.isOpen(id ? id : gif.default);
-    const gifId = gif.getResultId(id ? id : gif.default);
-    const gifCancel = gif.buttonCancel(id);
-
-    if (gifIsOpen && !gifId) {
-      util.notify('Gif cannot be empty.').warning();
-      return;
-    }
-
-    if (gifIsOpen && gifId) {
-      gifCancel.hide();
-    }
-
-    const form = document.getElementById(
-      `form-${id ? `inner-${id}` : 'comment'}`
-    );
-    if (!gifIsOpen && form.value?.trim().length === 0) {
-      util.notify('Comments cannot be empty.').warning();
-      return;
-    }
-
-    if (!id && name && !session.isAdmin()) {
-      name.disabled = true;
-    }
-
-    if (!session.isAdmin() && presence && presence.value !== '0') {
-      presence.disabled = true;
-    }
-
-    if (form) {
-      form.disabled = true;
-    }
-
-    const cancel = document.querySelector(
-      `[onclick="undangan.comment.cancel(this, '${id}')"]`
-    );
-    if (cancel) {
-      cancel.disabled = true;
-    }
-
-    const btn = util.disableButton(button);
-    const isPresence = presence ? presence.value === '1' : true;
-
-    if (!session.isAdmin()) {
-      const info = storage('information');
-      info.set('name', nameValue);
-
-      if (!id) {
-        info.set('presence', isPresence);
-      }
-    }
-
-    const response = await request(
-      HTTP_POST,
-      `/api/comment?lang=${lang.getLanguage()}`
-    )
-      .token(session.getToken())
-      .body(
-        dto.postCommentRequest(
-          id,
-          nameValue,
-          isPresence,
-          gifIsOpen ? null : form.value,
-          gifId
-        )
-      )
-      .send(dto.getCommentResponse);
-
-    if (name) {
-      name.disabled = false;
-    }
-
-    if (form) {
-      form.disabled = false;
-    }
-
-    if (cancel) {
-      cancel.disabled = false;
-    }
-
-    if (presence) {
-      presence.disabled = false;
-    }
-
-    if (gifIsOpen && gifId) {
-      gifCancel.show();
-    }
-
-    btn.restore();
-
-    if (!response || response.code !== HTTP_STATUS_CREATED) {
-      return;
-    }
-
-    owns.set(response.data.uuid, response.data.own);
-
-    if (form) {
-      form.value = null;
-    }
-
-    if (gifIsOpen && gifId) {
-      gifCancel.click();
-    }
-
-    if (!id) {
-      if (pagination.reset()) {
-        comments.scrollIntoView();
-        return;
-      }
-
-      pagination.setTotal(pagination.geTotal() + 1);
-      if (comments.children.length === pagination.getPer()) {
-        comments.lastElementChild.remove();
-      }
-
-      response.data.is_parent = true;
-      response.data.is_admin = session.isAdmin();
-      comments.insertAdjacentHTML(
-        'afterbegin',
-        await card.renderContentMany([response.data])
-      );
-      comments.scrollIntoView();
-    }
-
-    if (id) {
-      showHide.set(
-        'hidden',
-        showHide
-          .get('hidden')
-          .concat([dto.commentShowMore(response.data.uuid, true)])
-      );
-      showHide.set('show', showHide.get('show').concat([id]));
-
-      removeInnerForm(id);
-
-      response.data.is_parent = false;
-      response.data.is_admin = session.isAdmin();
-      document
-        .getElementById(`reply-content-${id}`)
-        .insertAdjacentHTML(
-          'beforeend',
-          await card.renderContentSingle(response.data)
-        );
-
-      const anchorTag = document
-        .getElementById(`button-${id}`)
-        .querySelector('a');
-      if (anchorTag) {
-        if (anchorTag.getAttribute('data-show') === 'false') {
-          showOrHide(anchorTag);
-        }
-
-        anchorTag.remove();
-      }
-
-      const uuids = [response.data.uuid];
-      const readMoreElement = document
-        .createRange()
-        .createContextualFragment(
-          card.renderReadMore(
-            id,
-            anchorTag
-              ? anchorTag.getAttribute('data-uuids').split(',').concat(uuids)
-              : uuids
-          )
-        );
-
-      const buttonLike = like.getButtonLike(id);
-      buttonLike.parentNode.insertBefore(readMoreElement, buttonLike);
-    }
-
-    like.addListener(response.data.uuid);
-    lastRender.push(response.data.uuid);
   };
 
   /**
