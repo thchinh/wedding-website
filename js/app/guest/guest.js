@@ -11,6 +11,9 @@ import { image } from './image.js';
 import { progress } from './progress.js';
 import { video } from './video.js';
 
+const WIFE_CODE = '131020';
+const HUSBAND_CODE = '261020';
+
 export const guest = (() => {
   /**
    * @type {ReturnType<typeof storage>|null}
@@ -157,6 +160,39 @@ export const guest = (() => {
   };
 
   /**
+   * @returns {Promise<void>}
+   */
+
+  const bindingGuestName = async () => {
+    // GuestId stand for UUID of the guest
+
+    const query = window.location.search.replace('?', '').split('&');
+    const guestId = query.find((q) => q.startsWith('g='))?.split('=')[1] || '1';
+
+    const res = await fetch('./assets/guests/data.json');
+    const guests = await res.json();
+    const guestName = guests.find((g) => g.id === guestId);
+
+    if (guestName) {
+      document.getElementById('form-name').value = guestName.name;
+      document.getElementById('guest-name').innerHTML = guestName.name;
+    }
+  };
+
+  const bindingAddress = () => {
+    // GuestId stand for UUID of the guest
+
+    const query = window.location.search.replace('?', '').split('&');
+    const tempCode = query.find((q) => q.startsWith('mode='))?.split('=')[1];
+
+    const finalCode = [HUSBAND_CODE, WIFE_CODE].includes(tempCode)
+      ? tempCode
+      : HUSBAND_CODE;
+
+    document.getElementById(finalCode).classList.toggle('d-none');
+  };
+
+  /**
    * @param {HTMLButtonElement} button
    * @returns {void}
    */
@@ -179,6 +215,10 @@ export const guest = (() => {
     util
       .changeOpacity(document.getElementById('welcome'), false)
       .then((el) => el.remove());
+
+    // Binding guest name and address
+    bindingGuestName();
+    bindingAddress();
   };
 
   /**
@@ -371,28 +411,7 @@ export const guest = (() => {
     lib.load({
       confetti: document.body.getAttribute('data-confetti') === 'true',
     });
-    document.dispatchEvent(new Event('undangan.progress.done'));
     document.dispatchEvent(new Event('undangan.session'));
-  };
-
-  /**
-   * @returns {Promise<void>}
-   */
-
-  const bindingGuestName = async () => {
-    // GuestId stand for UUID of the guest
-
-    const query = window.location.search.replace('?', '').split('&');
-    const guestId = query.find((q) => q.startsWith('g='))?.split('=')[1] || '1';
-
-    const res = await fetch('./assets/guests/data.json');
-    const guests = await res.json();
-    const guestName = guests.find((g) => g.id === guestId);
-
-    if (guestName) {
-      document.getElementById('form-name').value = guestName.name;
-      document.getElementById('guest-name').innerHTML = guestName.name;
-    }
   };
 
   const sendComment = (button) => {
@@ -430,7 +449,6 @@ export const guest = (() => {
       pool.init(pageLoaded, ['image', 'video', 'audio', 'libs']);
     });
 
-    bindingGuestName();
     return {
       sendComment,
       util,

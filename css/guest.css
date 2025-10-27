@@ -6,6 +6,27 @@ html {
     -ms-overflow-style: none !important;
 }
 
+.carousel-item img {
+    transition: transform 0.3s ease;
+    object-fit: cover;
+    height: 25rem;
+}
+
+.gradient-text-lr {
+  /* 1. Define the gradient background */
+  background: linear-gradient(to right, black, white);
+  
+  /* 2. Clip the background to the text shape */
+  -webkit-background-clip: text;  /* For Safari, Chrome, and other WebKit browsers */
+  background-clip: text;
+  
+  /* 3. Make the text color itself transparent */
+  color: transparent;
+
+  /* Optional: Ensures the text is rendered as a single block for the gradient */
+  display: inline-block; 
+}
+
 .with-scrollbar {
     scrollbar-width: auto !important;
     -ms-overflow-style: auto !important;
@@ -20,11 +41,12 @@ html {
 }
 
 .img-center-crop {
-    width: 13rem;
-    height: 13rem;
+    width: 15rem;
+    height: 15rem;
     max-width: 100%;
     max-height: 100%;
     object-fit: cover;
+    object-position: top;
 }
 
 html[data-bs-theme="dark"] .btn-transparent {
