@@ -130,8 +130,23 @@ svg {
     margin-bottom: -0.75rem !important;
 }
 
-#thank-you-end:hover, #thank-you-text:hover {
-    transform: scale(1.1);
+/* 1. Define the animation keyframes */
+@keyframes pulse {
+  0% {
+    transform: scale(1);    /* Start at normal size */
+  }
+  50% {
+    transform: scale(1.1);  /* Scale up (like your hover) */
+  }
+  100% {
+    transform: scale(1);    /* Return to normal size */
+  }
+}
+
+/* 2. Apply the animation to your elements */
+#thank-you-end, 
+#thank-you-text {
+  animation: pulse 2s ease-in-out infinite;
 }
 
 #button-scroll-top:hover, #button-music:hover {
