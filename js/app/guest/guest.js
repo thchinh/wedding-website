@@ -1,5 +1,3 @@
-import { lang } from '../../common/language.js';
-import { offline } from '../../common/offline.js';
 import { session } from '../../common/session.js';
 import { storage } from '../../common/storage.js';
 import { theme } from '../../common/theme.js';
@@ -295,8 +293,6 @@ export const guest = (() => {
    * @returns {object}
    */
   const loaderLibs = () => {
-    progress.add();
-
     /**
      * @param {{aos: boolean, confetti: boolean}} opt
      * @returns {void}
@@ -348,8 +344,6 @@ export const guest = (() => {
    * @returns {void}
    */
   const pageLoaded = () => {
-    lang.init();
-    offline.init();
     progress.init();
 
     config = storage('config');
@@ -359,10 +353,9 @@ export const guest = (() => {
     const img = image.init();
     const aud = audio.init();
     const lib = loaderLibs();
-    const token = document.body.getAttribute('data-key');
 
+    booting();
     window.addEventListener('resize', util.debounce(slide));
-    document.addEventListener('undangan.progress.done', () => booting());
     document.addEventListener('hide.bs.modal', () =>
       document.activeElement?.blur()
     );
@@ -372,43 +365,14 @@ export const guest = (() => {
         img.download(e.currentTarget.getAttribute('data-src'));
       });
 
-    if (!token || token.length <= 0) {
-      document.getElementById('comment')?.remove();
-      document
-        .querySelector('a.nav-link[href="#comment"]')
-        ?.closest('li.nav-item')
-        ?.remove();
-
-      vid.load();
-      img.load();
-      aud.load();
-      lib.load({
-        confetti: document.body.getAttribute('data-confetti') === 'true',
-      });
-    }
-
-    if (token && token.length > 0) {
-      // add 2 progress for config and comment.
-      // before img.load();
-      progress.add();
-      progress.add();
-
-      // if don't have data-src.
-      if (!img.hasDataSrc()) {
-        img.load();
-      }
-
-      document.dispatchEvent(new Event('undangan.session'));
-      if (img.hasDataSrc()) {
-        img.load();
-      }
-
-      vid.load();
-      aud.load();
-      lib.load({ confetti: true });
-      progress.complete('config');
-      progress.complete('comment');
-    }
+    vid.load();
+    img.load();
+    aud.load();
+    lib.load({
+      confetti: document.body.getAttribute('data-confetti') === 'true',
+    });
+    document.dispatchEvent(new Event('undangan.progress.done'));
+    document.dispatchEvent(new Event('undangan.session'));
   };
 
   /**
@@ -461,13 +425,6 @@ export const guest = (() => {
   const init = () => {
     theme.init();
     session.init();
-
-    if (session.isAdmin()) {
-      storage('user').clear();
-      storage('owns').clear();
-      storage('likes').clear();
-      storage('session').clear();
-    }
 
     window.addEventListener('load', () => {
       pool.init(pageLoaded, ['image', 'video', 'audio', 'libs']);

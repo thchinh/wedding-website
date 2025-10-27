@@ -99,7 +99,6 @@ export const audio = (() => {
    * @returns {object}
    */
   const init = () => {
-    progress.add();
     bindingScrollTop();
 
     return {

@@ -123,3 +123,8 @@ svg {
     background-color: black !important;
     color: white;
 }
+
+::selection {
+    background-color: pink;
+    /* color: white; */
+}
