@@ -6,12 +6,6 @@ html {
     -ms-overflow-style: none !important;
 }
 
-.carousel-item img {
-    transition: transform 0.3s ease;
-    object-fit: cover;
-    height: 25rem;
-}
-
 .gradient-text-lr {
   /* 1. Define the gradient background */
   background: linear-gradient(to right, black, white);
