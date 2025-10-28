@@ -25,6 +25,48 @@ export const guest = (() => {
    */
   let config = null;
 
+  const getMode = () => {
+    const query = window.location.search.replace('?', '').split('&');
+    const tempCode = query.find((q) => q.startsWith('m='))?.split('=')[1];
+
+    const finalCode = [HUSBAND_CODE, WIFE_CODE].includes(tempCode)
+      ? tempCode
+      : HUSBAND_CODE;
+    return finalCode;
+  };
+
+  const getCustomTime = () => {
+    const query = window.location.search.replace('?', '').split('&');
+    const time = query.find((q) => q.startsWith('t='))?.split('=')[1];
+
+    const finalTime = parseInt(time);
+    if (isNaN(finalTime) || finalTime < 0 || finalTime > 23) {
+      return '18';
+    }
+    return finalTime.toString().padStart(2, '0');
+  };
+
+  const changeDataTimeOnMode = () => {
+    const finalCode = getMode();
+    const dateTime =
+      finalCode === HUSBAND_CODE
+        ? '2025-11-23 11:30'
+        : `2025-11-22 ${getCustomTime()}:00`;
+
+    const dateStart = finalCode === HUSBAND_CODE ? '23-11-2025' : '22-11-2025';
+
+    document.body.setAttribute('data-time', dateTime);
+    document.querySelectorAll('.date-start').forEach((el) => {
+      el.textContent = dateStart;
+    });
+
+    if (finalCode === WIFE_CODE) {
+      document.getElementById(
+        'invite-time'
+      ).textContent = `${getCustomTime()}:00`;
+    }
+  };
+
   /**
    * @returns {void}
    */
@@ -179,17 +221,17 @@ export const guest = (() => {
     }
   };
 
-  const bindingAddress = () => {
-    // GuestId stand for UUID of the guest
+  const bindingMode = () => {
+    const finalCode = getMode();
 
-    const query = window.location.search.replace('?', '').split('&');
-    const tempCode = query.find((q) => q.startsWith('mode='))?.split('=')[1];
+    // Binding address mode
+    document.getElementById(finalCode)?.classList.toggle('d-none');
 
-    const finalCode = [HUSBAND_CODE, WIFE_CODE].includes(tempCode)
-      ? tempCode
-      : HUSBAND_CODE;
-
-    document.getElementById(finalCode).classList.toggle('d-none');
+    // Binding time mode
+    const timeDiv = document.getElementById(`time-${finalCode}`);
+    if (timeDiv) {
+      timeDiv.classList.toggle('d-none');
+    }
   };
 
   /**
@@ -218,7 +260,7 @@ export const guest = (() => {
 
     // Binding guest name and address
     bindingGuestName();
-    bindingAddress();
+    bindingMode();
   };
 
   /**
@@ -310,16 +352,35 @@ export const guest = (() => {
         .split('.')
         .shift();
 
+    const startDateTime = document.body.getAttribute('data-time');
+
+    const addHoursToDateTime = (dateTimeString, hours = 5) => {
+      const date = new Date(dateTimeString.replace(' ', 'T'));
+      date.setHours(date.getHours() + hours);
+
+      const year = date.getFullYear();
+      const month = String(date.getMonth() + 1).padStart(2, '0');
+      const day = String(date.getDate()).padStart(2, '0');
+      const hour = String(date.getHours()).padStart(2, '0');
+      const minute = String(date.getMinutes()).padStart(2, '0');
+
+      return `${year}-${month}-${day} ${hour}:${minute}`;
+    };
+
+    const endDateTime = addHoursToDateTime(startDateTime, 5);
+    const finalMode = getMode();
+
     const url = new URL('https://calendar.google.com/calendar/render');
     const data = new URLSearchParams({
       action: 'TEMPLATE',
       text: 'Lễ cưới Hữu Chinh & Thanh Trúc',
-      dates: `${formatDate('2025-11-23 11:30')}/${formatDate(
-        '2025-11-23 17:00'
-      )}`,
+      dates: `${formatDate(startDateTime)}/${formatDate(endDateTime)}`,
       details:
         'Chúng tôi hân hạnh mời Quý vị đến chung vui trong ngày trọng đại của chúng tôi. Sự có mặt và lời chúc của Quý vị chính là món quà ý nghĩa nhất.',
-      location: '5J8P+HC7, Thạnh Trị, Bình Đại, Bến Tre',
+      location:
+        finalMode === HUSBAND_CODE
+          ? '5J8P+HC7, Thạnh Trị, Bình Đại, Bến Tre'
+          : '5PC2+9Q2 Bình Đại, Bến Tre',
       ctz: config.get('vn'),
     });
 
@@ -352,6 +413,7 @@ export const guest = (() => {
    * @returns {Promise<void>}
    */
   const booting = async () => {
+    changeDataTimeOnMode();
     animateSvg();
     countDownDate();
     showGuestName();
@@ -410,6 +472,7 @@ export const guest = (() => {
     aud.load();
     lib.load({
       confetti: document.body.getAttribute('data-confetti') === 'true',
+      additionalFont: true,
     });
     document.dispatchEvent(new Event('undangan.session'));
   };

@@ -26,8 +26,12 @@ html {
     -ms-overflow-style: auto !important;
 }
 
-.font-esthetic {
-    font-family: 'Sacramento', cursive !important;
+.font-raleway {
+    font-family: 'Raleway', cursive !important;
+}
+
+.font-montserrat {
+    font-family: 'Montserrat', cursive !important;
 }
 
 .font-arabic {
@@ -158,4 +162,17 @@ svg {
 ::selection {
     background-color: pink;
     /* color: white; */
+}
+
+.invitation-wedding-date {
+    background: rgb(255 249 241);
+    border: 2px dashed rgb(223 203 179);
+    border-radius: 20px;
+}
+
+#note-img {
+    color: #414141;
+    background: white;
+    border-radius: 10px;
+    padding: 2px 10px;
 }
