@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Generate url</title>
+  </head>
+  <body>
+    <div
+      style="
+        max-width: 500px;
+        margin: 50px auto;
+        padding: 30px;
+        font-family: Arial, sans-serif;
+        background-color: #f9f9f9;
+        border-radius: 10px;
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+      "
+    >
+      <h2 style="text-align: center; color: #333; margin-bottom: 30px">
+        Wedding Guest URL Generator
+      </h2>
+
+      <div style="margin-bottom: 20px">
+        <label
+          for="inputMode"
+          style="
+            display: block;
+            margin-bottom: 8px;
+            font-weight: bold;
+            color: #555;
+          "
+          >Nhập Mode</label
+        >
+        <input
+          type="text"
+          id="inputMode"
+          style="
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #ddd;
+            border-radius: 5px;
+            font-size: 14px;
+            box-sizing: border-box;
+          "
+        />
+      </div>
+
+      <div style="margin-bottom: 20px">
+        <label
+          for="inputGuestID"
+          style="
+            display: block;
+            margin-bottom: 8px;
+            font-weight: bold;
+            color: #555;
+          "
+          >Nhập mã số khách mời</label
+        >
+        <input
+          type="text"
+          id="inputGuestID"
+          style="
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #ddd;
+            border-radius: 5px;
+            font-size: 14px;
+            box-sizing: border-box;
+          "
+        />
+      </div>
+
+      <div style="margin-bottom: 20px">
+        <label
+          for="inputTime"
+          style="
+            display: block;
+            margin-bottom: 8px;
+            font-weight: bold;
+            color: #555;
+          "
+          >Nhập thời gian</label
+        >
+        <input
+          type="text"
+          id="inputTime"
+          style="
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #ddd;
+            border-radius: 5px;
+            font-size: 14px;
+            box-sizing: border-box;
+          "
+        />
+      </div>
+      <button
+        id="generateButton"
+        style="
+          width: 100%;
+          padding: 15px;
+          background-color: #4caf50;
+          color: white;
+          border: none;
+          border-radius: 5px;
+          font-size: 16px;
+          font-weight: bold;
+          cursor: pointer;
+          margin-bottom: 20px;
+          transition: background-color 0.3s;
+        "
+      >
+        Generate URL
+      </button>
+
+      <div
+        style="
+          margin-bottom: 15px;
+          padding: 15px;
+          background-color: white;
+          border-radius: 5px;
+          border: 1px solid #ddd;
+        "
+      >
+        <strong style="color: #333">Result:</strong>
+        <span
+          id="result"
+          style="
+            word-break: break-all;
+            color: #666;
+            font-weight: bold;
+            font-family: monospace;
+            font-size: 20px;
+          "
+        ></span>
+      </div>
+
+      <button
+        id="copyButton"
+        style="
+          width: 100%;
+          padding: 12px;
+          background-color: #2196f3;
+          color: white;
+          border: none;
+          border-radius: 5px;
+          font-size: 14px;
+          cursor: pointer;
+          transition: background-color 0.3s;
+        "
+      >
+        Copy link
+      </button>
+    </div>
+
+    <script src="./js/app/guest/helper.js"></script>
+  </body>
+</html>
