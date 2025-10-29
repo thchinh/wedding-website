@@ -1,14 +1,12 @@
 [
     {
         "id": "1",
-        "name": "Tâm + Người thương",
-        "wish": "",
-        "attend": true
+        "code": "DOGJK",
+        "name": "Tâm + Người thương"
     },
     {
         "id": "2",
-        "name": "Nhi + Người thương",
-        "wish": "",
-        "attend": true
+        "code": "OIOIB",
+        "name": "Nhi + Người thương"
     }
 ]

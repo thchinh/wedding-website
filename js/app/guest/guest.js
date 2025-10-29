@@ -212,7 +212,7 @@ export const guest = (() => {
 
     const res = await fetch('./assets/guests/data.json');
     const guests = await res.json();
-    const guestName = guests.find((g) => g.id === guestId);
+    const guestName = guests.find((g) => g.code === guestId);
 
     if (guestName) {
       document.getElementById('form-name').value = guestName.name;

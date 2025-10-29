@@ -10,11 +10,23 @@ function clearData() {
   result.innerText = '';
 }
 
-function generateGuestURL(mode, guestID, time) {
+async function getData() {
+  const res = await fetch('./assets/guests/data.json');
+  const guests = await res.json();
+  return guests;
+}
+
+async function generateGuestURL(mode, guestID, time) {
   const baseURL = 'https://thchinh.github.io/wedding-website';
+  const guests = await getData();
+  const guest = guests.find((g) => g.id === guestID);
   const url = new URL(baseURL);
+
   url.searchParams.append('m', mode);
-  url.searchParams.append('g', guestID);
+
+  if (guest) {
+    url.searchParams.append('g', guest.code);
+  }
 
   if (time) {
     url.searchParams.append('t', time);
@@ -38,7 +50,7 @@ copyButton.addEventListener('click', function () {
   this.innerText = 'Copied!';
 });
 
-generateButton.addEventListener('click', function () {
+generateButton.addEventListener('click', async function () {
   const valueInputMode = inputMode.value;
   const valueInputGuestID = inputGuestID.value;
   const valueTime = inputTime.value;
@@ -48,7 +60,7 @@ generateButton.addEventListener('click', function () {
     return;
   }
 
-  const generatedURL = generateGuestURL(
+  const generatedURL = await generateGuestURL(
     valueInputMode,
     valueInputGuestID,
     valueTime
