@@ -1,3 +1,15 @@
+const copyButton = document.getElementById('copyButton');
+const generateButton = document.getElementById('generateButton');
+const inputMode = document.getElementById('inputMode');
+const inputGuestID = document.getElementById('inputGuestID');
+const inputTime = document.getElementById('inputTime');
+const result = document.getElementById('result');
+
+function clearData() {
+  copyButton.innerText = 'Copy link';
+  result.innerText = '';
+}
+
 function generateGuestURL(mode, guestID, time) {
   const baseURL = 'https://thchinh.github.io/wedding-website';
   const url = new URL(baseURL);
@@ -10,17 +22,9 @@ function generateGuestURL(mode, guestID, time) {
   return url.toString();
 }
 
-const copyButton = document.getElementById('copyButton');
-const generateButton = document.getElementById('generateButton');
-const inputMode = document.getElementById('inputMode');
-const inputGuestID = document.getElementById('inputGuestID');
-const inputTime = document.getElementById('inputTime');
-const result = document.getElementById('result');
-
-inputGuestID.addEventListener('keydown', function () {
-  copyButton.innerText = 'Copy link';
-  result.innerText = '';
-});
+inputGuestID.addEventListener('keydown', clearData);
+inputMode.addEventListener('keydown', clearData);
+inputTime.addEventListener('keydown', clearData);
 
 copyButton.addEventListener('click', function () {
   const resultText = result.innerText;
