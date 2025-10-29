@@ -89,10 +89,6 @@ const loadAdditionalFont = (c) => {
       css: 'https://fonts.googleapis.com/css2?family=Dancing+Script&display=swap',
       family: 'Dancing Script',
     },
-    {
-      css: 'https://fonts.googleapis.com/css2?family=Fuzzy+Bubbles&display=swap',
-      family: 'Story Script',
-    },
   ];
 
   /**

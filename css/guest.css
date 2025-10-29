@@ -1,6 +1,23 @@
 @import url("common.css");
 @import url("animation.css");
 
+/* fuzzy-bubbles-regular - latin */
+@font-face {
+  font-display: swap;
+  font-family: 'Story Script';
+  font-style: normal;
+  font-weight: 400;
+  src: url('/assets/fonts/fuzzy-bubbles-v9-latin-regular.woff2') format('woff2');
+}
+/* fuzzy-bubbles-700 - latin */
+@font-face {
+  font-display: swap;
+  font-family: 'Story Script bold';
+  font-style: normal;
+  font-weight: 700;
+  src: url('/assets/fonts/fuzzy-bubbles-v9-latin-700.woff2') format('woff2');
+}
+
 html {
     scrollbar-width: none !important;
     -ms-overflow-style: none !important;
