@@ -53,8 +53,6 @@ export const progress = (() => {
   const invalid = (type) => {
     if (valid) {
       valid = false;
-      bar.style.backgroundColor = 'red';
-      info.innerText = `Error loading ${type}`;
       document.dispatchEvent(new Event('undangan.progress.invalid'));
     }
   };

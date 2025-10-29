@@ -51,7 +51,7 @@
 }
 
 .slide-desktop {
-    transform: scale(1);
+    transform: scale(0.9);
     transition: transform 10s linear;
 }
 
