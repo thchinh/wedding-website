@@ -204,8 +204,15 @@ svg {
     font-size: 1.5rem;
     font-weight: 600;
     font-family: 'Story Script', cursive !important;
+    font-style: italic;
 }
 
 .slide-img {
     border-radius: 20px;
+}
+
+.invite-date {
+    font-size: 1.8rem;
+    font-style: italic;
+    font-weight: 700;
 }
