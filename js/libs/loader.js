@@ -86,8 +86,12 @@ const loadAdditionalFont = (c) => {
       family: 'Noto Naskh Arabic',
     },
     {
-      css: 'https://fonts.googleapis.com/css2?family=Lato&display=swap',
-      family: 'Lato',
+      css: 'https://fonts.googleapis.com/css2?family=Dancing+Script&display=swap',
+      family: 'Dancing Script',
+    },
+    {
+      css: 'https://fonts.googleapis.com/css2?family=Indie+Flower&display=swap',
+      family: 'Story Script',
     },
   ];
 

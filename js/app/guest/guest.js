@@ -9,7 +9,6 @@ import { loader } from '../../libs/loader.js';
 import { audio } from './audio.js';
 import { image } from './image.js';
 import { progress } from './progress.js';
-import { video } from './video.js';
 
 const WIFE_CODE = '131020';
 const HUSBAND_CODE = '261020';
@@ -451,7 +450,6 @@ export const guest = (() => {
     config = storage('config');
     information = storage('information');
 
-    const vid = video.init();
     const img = image.init();
     const aud = audio.init();
     const lib = loaderLibs();
@@ -467,7 +465,6 @@ export const guest = (() => {
         img.download(e.currentTarget.getAttribute('data-src'));
       });
 
-    vid.load();
     img.load();
     aud.load();
     lib.load({
@@ -509,7 +506,7 @@ export const guest = (() => {
     session.init();
 
     window.addEventListener('load', () => {
-      pool.init(pageLoaded, ['image', 'video', 'audio', 'libs']);
+      pool.init(pageLoaded, ['image', 'audio', 'libs']);
     });
 
     return {
