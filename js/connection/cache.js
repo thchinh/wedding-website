@@ -97,15 +97,8 @@ export const cache = (cacheName) => {
     items
       .filter((val) => val !== null)
       .forEach((val) => {
-        let url = val.url;
-        const exist = uniq.get(url) ?? [];
-
-        if (window.location.origin.includes('thchinh.github.io')) {
-          url = url.replace('./', './wedding-website/');
-          exist.url = url;
-        }
-
-        uniq.set(url, [...exist, [val.res, val?.rej]]);
+        const exist = uniq.get(val.url) ?? [];
+        uniq.set(val.url, [...exist, [val.res, val?.rej]]);
       });
 
     return Promise.allSettled(
