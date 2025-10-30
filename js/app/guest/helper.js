@@ -17,7 +17,11 @@ async function getData() {
 }
 
 async function generateGuestURL(mode, guestID, time) {
-  const baseURL = 'https://thchinh.github.io/wedding-website';
+  const originUrl = window.location.origin;
+  const baseURL =
+    originUrl.includes('localhost') || originUrl.includes('127.0.0.1')
+      ? 'http://localhost:8080'
+      : 'https://thchinh.github.io/wedding-website';
   const guests = await getData();
   const guest = guests.find((g) => g.id === guestID);
   const url = new URL(baseURL);
