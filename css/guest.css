@@ -45,7 +45,7 @@ html {
     max-width: 100%;
     max-height: 100%;
     object-fit: cover;
-    object-position: top;
+    object-position: center;
 }
 
 html[data-bs-theme="dark"] .btn-transparent {
@@ -189,7 +189,7 @@ svg {
     transform: scale(1.1);
     transition: all 0.3s ease-in-out;
 }
-
+.album-img
  #guest-name:hover {
     transform: scale(1.2);
     transition: all 0.3s ease-in-out;
