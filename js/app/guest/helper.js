@@ -16,6 +16,16 @@ async function getData() {
   return guests;
 }
 
+async function getGuestIDOptions() {
+  const guests = await getData();
+  guests.forEach((element) => {
+    const option = document.createElement('option');
+    option.value = element.code;
+    option.text = element.name;
+    inputGuestID.appendChild(option);
+  });
+}
+
 async function generateGuestURL(mode, guestID, time) {
   const originUrl = window.location.origin;
   const baseURL =
@@ -23,7 +33,7 @@ async function generateGuestURL(mode, guestID, time) {
       ? 'http://localhost:8080'
       : originUrl;
   const guests = await getData();
-  const guest = guests.find((g) => g.id === guestID);
+  const guest = guests.find((g) => g.code === guestID);
   const url = new URL(baseURL);
 
   url.searchParams.append('m', mode);
@@ -71,3 +81,6 @@ generateButton.addEventListener('click', async function () {
   );
   result.innerText = generatedURL;
 });
+
+// Initialize guest ID options on page load
+getGuestIDOptions();

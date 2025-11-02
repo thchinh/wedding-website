@@ -32,8 +32,8 @@
           "
           >Nhập Mode</label
         >
-        <input
-          type="text"
+        <select
+          name="inputMode"
           id="inputMode"
           style="
             width: 100%;
@@ -42,8 +42,14 @@
             border-radius: 5px;
             font-size: 14px;
             box-sizing: border-box;
+            background-color: white;
+            cursor: pointer;
+            transition: border-color 0.3s;
           "
-        />
+        >
+          <option selected value="261020">Chinh</option>
+          <option value="131020">Trúc</option>
+        </select>
       </div>
 
       <div style="margin-bottom: 20px">
@@ -57,8 +63,8 @@
           "
           >Nhập mã số khách mời</label
         >
-        <input
-          type="text"
+        <select
+          name="inputGuestID"
           id="inputGuestID"
           style="
             width: 100%;
@@ -67,8 +73,11 @@
             border-radius: 5px;
             font-size: 14px;
             box-sizing: border-box;
+            background-color: white;
+            cursor: pointer;
+            transition: border-color 0.3s;
           "
-        />
+        ></select>
       </div>
 
       <div style="margin-bottom: 20px">
