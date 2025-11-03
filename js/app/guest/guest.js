@@ -212,12 +212,15 @@ export const guest = (() => {
 
     const res = await fetch('./assets/guests/data.json');
     const guests = await res.json();
-    const guestName = guests.find((g) => g.code === guestId);
-    console.log('guestName: ', guestName);
+    const guestData = guests.find((g) => g.code === guestId);
+    const guestElement = document.getElementById('guest-name');
 
-    if (guestName) {
-      document.getElementById('form-name').value = guestName.name;
-      document.getElementById('guest-name').innerText = guestName.name;
+    if (guestData) {
+      guestElement.innerText = guestData.name;
+
+      if (['CISIJ', 'SAITP'].includes(guestData.code)) {
+        guestElement.style.color = '#0a58ca';
+      }
     }
   };
 

@@ -48,8 +48,8 @@ async function generateGuestURL(mode, guestID, time) {
   return url.toString();
 }
 
-inputGuestID.addEventListener('keydown', clearData);
-inputMode.addEventListener('keydown', clearData);
+inputGuestID.addEventListener('change', clearData);
+inputMode.addEventListener('change', clearData);
 inputTime.addEventListener('keydown', clearData);
 
 copyButton.addEventListener('click', function () {
